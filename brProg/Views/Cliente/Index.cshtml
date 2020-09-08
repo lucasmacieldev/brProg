@@ -1,0 +1,68 @@
+﻿@model brProg.Models.ClienteListViewModel
+@{
+    ViewBag.Title = "Cadastrar Cliente";
+    Layout = "~/Views/Shared/_LayoutAll.cshtml";
+}
+
+@Html.Partial("_NavBotoesPainel")
+
+<a href="/Cliente/Register" class="btn btn-reflex-azul btn-block">Cadastrar Cliente</a>
+<br />
+@using (Html.BeginForm("Index", "Cliente", FormMethod.Post))
+{
+    <form role="form">
+        <div class="titulo">Pesquisar Cliente:</div>
+        <div class="form-group control-prod">
+            @Html.TextBoxFor(m => Model.NomeCliente, new { id = "controle-pesq", @class = "form-control ajust", placeholder = "Pesquisar por Nome do Cliente" })
+        </div>
+        <div class="form-group control-prod">
+            @Html.TextBoxFor(m => Model.Cpf, new { id = "controle-pesq2", @class = "form-control ajust2", placeholder = "Pesquisar por Cpf" })
+        </div>
+
+        <button type="submit" class="btn btn-reflex-azul btn-block">Pesquisar</button>
+        <p class="erro-form">@ViewBag.Message</p>
+    </form>
+}
+
+@if (Model.AchouResultado == null)
+{
+
+}else if(Model.AchouResultado == true)
+{
+
+    <div class="Container">
+        <div class="titulo">Resultado da Pesquisa</div>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Nome Cliente</th>
+                    <th>CPF</th>
+                    <th>Email</th>
+                    <th>Telefone</th>
+                    <th>Alterar</th>
+                    <th>Deletar</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var cliente in Model.Clientes)
+                {
+                <tr>
+                    <td>@cliente.NomeCliente</td>
+                    <td>@cliente.Cpf</td>
+                    <td>@cliente.Email</td>
+                    <td>@cliente.Telefone</td>
+                    <td>@Html.ActionLink("Alterar", "Alterar", new { id = cliente.id })</td>
+                    <td>@Html.ActionLink("Deletar", "Deletar", new { id = cliente.id }, new { id = "deletar", onclick = "return confirm('Deseja realmente excluir?')" })</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+
+}
+else if(Model.AchouResultado == false)
+{
+    <h3>Nenhum resultado encontrado</h3>
+}
